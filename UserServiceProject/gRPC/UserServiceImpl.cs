@@ -15,23 +15,30 @@ public class UserServiceImpl : UserService.UserServiceBase
 
     public override async Task<GetUserResponse> GetUser(GetUserRequest request, ServerCallContext context)
     {
-        var user = await _userService.GetUserByIdAsync(request.Id);
-
-        if (user == null)
+        try
         {
-            throw new RpcException(new Status(StatusCode.NotFound, "User not found"));
-        }
+            var user = await _userService.GetUserByIdAsync(request.Id);
 
-        return new GetUserResponse
-        {
-            User = new User
+            if (user == null)
             {
-                NationalCode = user.NationalCode,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                BirthDate = user.BirthDate.ToString("yyyy-MM-dd")
+                throw new RpcException(new Status(StatusCode.NotFound, "User not found"));
             }
-        };
+
+            return new GetUserResponse
+            {
+                User = new User
+                {
+                    NationalCode = user.NationalCode,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    BirthDate = user.BirthDate.ToString("yyyy-MM-dd")
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 
     public override async Task<AddUserResponse> AddUser(AddUserRequest request, ServerCallContext context)
@@ -60,23 +67,37 @@ public class UserServiceImpl : UserService.UserServiceBase
 
     public override async Task<UpdateUserResponse> UpdateUser(UpdateUserRequest request, ServerCallContext context)
     {
-        var user = new UserModel
+        try
         {
-            NationalCode = request.User.NationalCode,
-            FirstName = request.User.FirstName,
-            LastName = request.User.LastName,
-            BirthDate = DateTime.Parse(request.User.BirthDate)
-        };
+            var user = new UserModel
+            {
+                NationalCode = request.User.NationalCode,
+                FirstName = request.User.FirstName,
+                LastName = request.User.LastName,
+                BirthDate = DateTime.Parse(request.User.BirthDate)
+            };
 
-        await _userService.UpdateUserAsync(user);
+            await _userService.UpdateUserAsync(user);
 
-        return new UpdateUserResponse { Success = true };
+            return new UpdateUserResponse { Success = true };
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 
     public override async Task<DeleteUserResponse> DeleteUser(DeleteUserRequest request, ServerCallContext context)
     {
-        await _userService.DeleteUserAsync(request.Id);
+        try
+        {
+            await _userService.DeleteUserAsync(request.Id);
 
-        return new DeleteUserResponse { Success = true };
+            return new DeleteUserResponse { Success = true };
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 }
