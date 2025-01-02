@@ -6,7 +6,7 @@ namespace ApplicationLayer.gRPC;
 
 public class UserServiceImpl : UserService.UserServiceBase
 {
-    private readonly IUserService _userService; // سرویس لایه BLL
+    private readonly IUserService _userService; 
 
     public UserServiceImpl(IUserService userService)
     {

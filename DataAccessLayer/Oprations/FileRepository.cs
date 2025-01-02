@@ -9,7 +9,7 @@ public class FileRepository<T> : IRepository<T> where T : class
 
     public FileRepository(DbConnectionManager connectionManager)
     {
-        // دریافت مسیر فایل از DbConnectionManager
+        // Give FilePath from DbConnectionManager
         _filePath = connectionManager.GetFilePath();
     }
 

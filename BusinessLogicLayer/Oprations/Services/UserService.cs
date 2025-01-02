@@ -18,14 +18,14 @@ public class UserService : IUserService
 
     public async Task AddUserAsync(UserModel user)
     {
-        // اعتبارسنجی داده‌های ورودی
+        //validate user
         var validationResult = await _userValidator.ValidateAsync(user);
         if (!validationResult.IsValid)
         {
             throw new ArgumentException("Invalid user data.");
         }
 
-        // انتخاب Repository مناسب
+        // Select Repository
         var userRepository = _repositoryFactory.CreateRepository<UserModel>();
         await userRepository.AddAsync(user);
     }
